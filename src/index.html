@@ -223,13 +223,21 @@
 
         // --- LOGIC ---
         const playHistory = {}; 
-        let currentVolume = 0.5; // Default volume (50%)
-
+        
+        // UI Elements
         const startBtn = document.getElementById('startBtn');
         const testBtn = document.getElementById('testBtn');
         const statusDiv = document.getElementById('status');
         const volumeSlider = document.getElementById('volumeSlider');
         const volumeLabel = document.getElementById('volumeLabel');
+
+        // Initialize volume from browser storage (default to 0.5 if not found)
+        let savedVolume = localStorage.getItem('pikminVolume');
+        let currentVolume = savedVolume !== null ? parseFloat(savedVolume) : 0.5;
+        
+        // Update slider and label on load
+        volumeSlider.value = currentVolume;
+        volumeLabel.innerText = Math.round(currentVolume * 100) + '%';
 
         // Function to log exclusively to the browser console
         function logToConsole(message) {
@@ -241,6 +249,9 @@
         volumeSlider.addEventListener('input', (event) => {
             currentVolume = parseFloat(event.target.value);
             volumeLabel.innerText = Math.round(currentVolume * 100) + '%';
+            
+            // Save the new volume to browser storage
+            localStorage.setItem('pikminVolume', currentVolume);
         });
 
         // Test Sound Button (Bypasses timers)
